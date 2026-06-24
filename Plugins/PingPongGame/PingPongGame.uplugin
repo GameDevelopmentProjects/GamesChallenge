@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PingPongGame",
+	"Description": "Pong was the first widely successful arcade game. It was released in 1972, and started the first arcade boom. The game may seem simple today, but it was designed directly in hardware. Essentially, Pong was a specialized computer designed to bounce a ball between two paddles and keep score.",
+	"Category": "Other",
+	"CreatedBy": "LightYagami",
+	"CreatedByURL": "https://dev.epicgames.com/community/profile/1qejZ/Light_Yagami555",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "PingPongGame",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
