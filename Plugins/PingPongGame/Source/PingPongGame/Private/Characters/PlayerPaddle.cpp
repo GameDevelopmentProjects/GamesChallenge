@@ -46,7 +46,6 @@ void APlayerPaddle::UnPossessed()
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (PC)
 	{
-
 		if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem =
 			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
 		{
@@ -89,6 +88,5 @@ void APlayerPaddle::EndPlay(EEndPlayReason::Type EndPlay)
 void APlayerPaddle::HandleMoveUp(const FInputActionValue& Value)
 {
 	float MoveInput = Value.Get<float>();
-
 	MoveUp(MoveInput);
 }

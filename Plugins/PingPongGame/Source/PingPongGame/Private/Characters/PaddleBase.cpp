@@ -36,7 +36,7 @@ void APaddleBase::MoveUp(float MoveInput)
 	AddMovementInput(FVector(0.0f, 1.0f, 0.0f), Velocity);
 
 
-	UE_LOG(LogPaddleBase, Verbose, TEXT("Paddle current velocity: %f"), Velocity)
+	UE_LOG(LogPaddleBase, Verbose, TEXT("Paddle current velocity: %f"), Velocity)	
 }
 
 void APaddleBase::NotifyMovementEnded()

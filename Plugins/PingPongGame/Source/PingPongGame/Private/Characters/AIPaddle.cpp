@@ -15,21 +15,18 @@ AAIPaddle::AAIPaddle()
 
 	switch (Difficulty)
 	{
-	case EAIPaddleDifficulty::Easy:
-		DifficultyData = { ReactionTime, DeadZone, PaddleSpeed};
-		break;
-
-	case EAIPaddleDifficulty::Medium:
-		DifficultyData = { 0.10f, 20.f, 300.f };
+	case EAIPaddleDifficulty::Default:
+		DifficultyData = DefaultDifficultyData;
 		break;
 
 	case EAIPaddleDifficulty::Hard:
-		DifficultyData = { 0.05f, 5.f, 600.f };
+		DifficultyData = HardDifficultyData;
 		break;
 	}
 
+
 	SetActorTickInterval(DifficultyData.ReactionTime);
-	GetCharacterMovement()->MaxWalkSpeed = DifficultyData.PaddleSpeed;
+	MovementSpeedMultiplier = DifficultyData.PaddleSpeed;
 }
 
 void AAIPaddle::BeginPlay()

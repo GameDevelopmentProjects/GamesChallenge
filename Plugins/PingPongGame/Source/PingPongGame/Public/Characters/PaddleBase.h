@@ -38,9 +38,11 @@ protected:
 	void MoveUp(float MoveInput);
 	void NotifyMovementEnded();
 
-private:
-	UPROPERTY(EditDefaultsOnly, BlueprintGetter=GetMovementSpeedMultiplier, Category= "Paddle|Input", meta= (ClampMin="0.5", UIMin="0.5"))
+	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMovementSpeedMultiplier, Category = "Paddle|Input", meta = (ClampMin = "0.5", UIMin = "0.5"))
 	float MovementSpeedMultiplier = 1.0f;
+
+private:
+	
 
 	float Velocity;
 	bool bIsMoving = false;

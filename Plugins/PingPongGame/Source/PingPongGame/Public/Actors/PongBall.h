@@ -61,7 +61,7 @@ private:
 
 	/** Max speed of the pong, will gradually keep increasing. */
 	UPROPERTY(EditAnywhere, Category = "PongBall|Speed", meta= (ClampMin = "10"))
-	float MaxSpeed = StartSpeed + 10.0f;
+	float MaxSpeed =  20.0f;
 
 	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation", meta= (ClampMin= "10", ClampMax= "25"))
 	float MaxPaddleVelocityAngleInfluence = 20.0f;

@@ -8,18 +8,23 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogAIPaddle, Log, All)
 
+USTRUCT(BlueprintType)
 struct FAIPaddleDifficulty
 {
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, Category="Difficulty")
 	float ReactionTime;	
+	UPROPERTY(EditAnywhere, Category = "Difficulty")
 	float DeadZone;
+	UPROPERTY(EditAnywhere, Category = "Difficulty")
 	float PaddleSpeed;
 };
 
 UENUM(BlueprintType)
 enum class EAIPaddleDifficulty : uint8
 {
-	Easy    UMETA(DisplayName = "Easy"),
-	Medium  UMETA(DisplayName = "Medium"),
+	Default  UMETA(DisplayName = "Default"),
 	Hard    UMETA(DisplayName = "Hard")
 };
 
@@ -48,17 +53,13 @@ protected:
 
 	/** Ai difficulty mode */
 	UPROPERTY(EditAnywhere, Category = "Paddle|AI")
-	EAIPaddleDifficulty Difficulty = EAIPaddleDifficulty::Medium;
+	EAIPaddleDifficulty Difficulty = EAIPaddleDifficulty::Default;
 
-	UPROPERTY(EditAnywhere, Category = "Paddle|AI")
-	float ReactionTime = 0.20f;
+	UPROPERTY(EditAnywhere, Category = "Paddle|AI", AdvancedDisplay)
+	FAIPaddleDifficulty HardDifficultyData = { 0.0f, 0.f, 3.0f };
 
-	UPROPERTY(EditAnywhere, Category = "Paddle|AI")
-	float DeadZone = 30.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Paddle|AI")
-	float PaddleSpeed = 200.0f;
-
+	UPROPERTY(EditAnywhere, Category = "Paddle|AI", AdvancedDisplay)
+	FAIPaddleDifficulty DefaultDifficultyData = { 0.1f, 20.f, 2.0f };
 private:
 
 	FAIPaddleDifficulty DifficultyData;
