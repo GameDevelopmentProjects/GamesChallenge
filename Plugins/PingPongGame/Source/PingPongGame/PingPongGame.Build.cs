@@ -25,7 +25,12 @@ public class PingPongGame : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+                "Core",
+				"CoreUObject",
+				"Engine",
+				"InputCore",
+				"EnhancedInput",
+				"Paper2D"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -34,10 +39,8 @@ public class PingPongGame : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
+                "Slate",
+				"SlateCore"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -21,6 +21,10 @@
 		{
 			"Name": "PongGame",
 			"Enabled": false
+		},
+		{
+			"Name": "AIAssistant",
+			"Enabled": true
 		}
 	]
 }
