@@ -66,6 +66,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation", meta= (ClampMin= "10", ClampMax= "25"))
 	float MaxPaddleVelocityAngleInfluence = 20.0f;
 
+	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation|Advanced|")
+
+
+
 	/** The Effective Speed of the ball, this will keep increasing until it reaches max speed. */
 	float Velocity;
 
