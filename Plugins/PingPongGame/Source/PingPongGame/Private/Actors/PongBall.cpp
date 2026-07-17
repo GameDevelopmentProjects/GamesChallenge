@@ -99,11 +99,8 @@ void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 		return;
 	}
 
-	Direction = GetActorForwardVector();
-	FVector Reflected = FMath::GetReflectionVector(Direction, Hit.ImpactNormal);
-	Direction = Reflected.GetSafeNormal2D();
-
-	float Angle = FMath::RadiansToDegrees(FMath::Atan2(Direction.Y, Direction.X));
+	FVector Reflected = FMath::GetReflectionVector(Direction, Hit.ImpactNormal).GetSafeNormal2D();
+	float Angle = FMath::RadiansToDegrees(FMath::Atan2(Reflected.Y, Reflected.X));
 	
 	// Handle paddle velocity influence on this ball
 	APaddleBase* Paddle = Cast<APaddleBase>(OtherActor);
@@ -118,10 +115,12 @@ void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 	}
 
 
+	Angle = (Reflected.X > 0) ? FMath::Clamp(Angle, -70.0f, 70.0f) : FMath::Clamp(Angle, 110.0f, 250.0f);
+	Direction.X = FMath::Cos(FMath::DegreesToRadians(Angle));
+	Direction.Y = FMath::Sin(FMath::DegreesToRadians(Angle));
+
 	SetActorRotation(FRotator(0.0f, Angle, 90.0f));
 
 	UE_LOG(LogPongBall, Log, TEXT("Ball hit triggered."))
-	UE_LOG(LogPongBall, Verbose, TEXT("New Direction: X: %f Y: %f \n New Angle: %f"), 
-		Direction.X, Direction.Y, Angle
-	)
+	UE_LOG(LogPongBall, Verbose, TEXT("New Direction: X: %f Y: %f New Angle: %f"), Direction.X, Direction.Y, Angle)
 }

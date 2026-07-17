@@ -55,11 +55,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Paddle|AI")
 	EAIPaddleDifficulty Difficulty = EAIPaddleDifficulty::Default;
 
-	UPROPERTY(EditAnywhere, Category = "Paddle|AI", AdvancedDisplay)
+	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
+	FAIPaddleDifficulty DefaultDifficultyData = { 0.1f, 20.f, 2.0f };
+
+	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
 	FAIPaddleDifficulty HardDifficultyData = { 0.0f, 0.f, 3.0f };
 
-	UPROPERTY(EditAnywhere, Category = "Paddle|AI", AdvancedDisplay)
-	FAIPaddleDifficulty DefaultDifficultyData = { 0.1f, 20.f, 2.0f };
 private:
 
 	FAIPaddleDifficulty DifficultyData;
