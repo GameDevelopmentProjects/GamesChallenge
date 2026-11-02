@@ -87,7 +87,7 @@ void APongBall::MoveBall(float DeltaSeconds)
 
 	if (Velocity <= MaxSpeed)
 	{
-		Velocity += 10.0f;
+		Velocity += 1.0f;
 	}
 }
 
@@ -111,11 +111,11 @@ void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 		float PaddleVelocity;
 		if (Paddle->TryGetVelocity(PaddleVelocity))
 		{
-			Angle += PaddleVelocity * FMath::RandRange(1.0f, MaxPaddleVelocityAngleInfluence);
+			Angle += PaddleVelocity * FMath::RandRange(5.0f, MaxPaddleVelocityAngleInfluence);
 		}
 	}
 
-	Angle = (Reflected.X > 0) ? FMath::ClampAngle(Angle, -70.0f, 70.0f) : FMath::ClampAngle(Angle, -140.0f, 140.0f);
+	Angle = (Reflected.X > 0) ? FMath::ClampAngle(Angle, -LeftSideAngle, LeftSideAngle) : FMath::ClampAngle(Angle, -RightSideAngle, RightSideAngle);
 	Direction.X = FMath::Cos(FMath::DegreesToRadians(Angle));
 	Direction.Y = FMath::Sin(FMath::DegreesToRadians(Angle));
 

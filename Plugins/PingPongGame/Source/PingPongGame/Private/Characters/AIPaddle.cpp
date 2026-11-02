@@ -52,13 +52,25 @@ void AAIPaddle::Tick(float DeltaSeconds)
 
 	if (!Ball) return;
 
-	const float BallY = Ball->GetYCoordinate();
-	const float PaddleY = GetActorLocation().Y;
+	FVector Location = Ball->GetActorLocation();
+	FVector Forward = Ball->GetActorForwardVector();
+
+	FHitResult Hit;
+	TArray<TWeakObjectPtr<const AActor>> IgnoredActors;
+	IgnoredActors.Add(this);
+	IgnoredActors.Add(Ball);
 	
-	if (FMath::Abs(BallY - PaddleY) >= DifficultyData.DeadZone)
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActors(IgnoredActors);
+	Params.bDebugQuery = true;
+
+	bool bHit= Ball->ActorLineTraceSingle(Hit, Location, Location + (Forward * 500.0f), ECC_WorldStatic, Params);
+
+	if (bHit)
 	{
-		MoveUp((BallY > PaddleY) ? 1.0f : -1.0f);
+		//Hit. COntinue
 	}
+	
 }
 
 void AAIPaddle::EndPlay(EEndPlayReason::Type EndPlayReason)
