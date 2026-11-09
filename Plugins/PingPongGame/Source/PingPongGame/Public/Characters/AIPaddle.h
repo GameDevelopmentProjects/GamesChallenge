@@ -13,10 +13,6 @@ struct FAIPaddleDifficulty
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Category="Difficulty")
-	float ReactionTime;	
-	UPROPERTY(EditAnywhere, Category = "Difficulty")
-	float DeadZone;
 	UPROPERTY(EditAnywhere, Category = "Difficulty")
 	float PaddleSpeed;
 };
@@ -24,6 +20,7 @@ struct FAIPaddleDifficulty
 UENUM(BlueprintType)
 enum class EAIPaddleDifficulty : uint8
 {
+	Easy UMETA(DisplayName = "Easy"),
 	Default  UMETA(DisplayName = "Default"),
 	Hard    UMETA(DisplayName = "Hard")
 };
@@ -56,12 +53,27 @@ protected:
 	EAIPaddleDifficulty Difficulty = EAIPaddleDifficulty::Default;
 
 	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
-	FAIPaddleDifficulty DefaultDifficultyData = { 0.1f, 20.f, 2.0f };
+	FAIPaddleDifficulty EasyDifficultyData = { 0.3f };
 
 	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
-	FAIPaddleDifficulty HardDifficultyData = { 0.0f, 0.f, 3.0f };
+	FAIPaddleDifficulty DefaultDifficultyData = { 0.1f };
+
+	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
+	FAIPaddleDifficulty HardDifficultyData = { 0.0f };
+
+#if WITH_EDITORONLY_DATA
+
+	UPROPERTY(EditAnywhere, Category = "Paddle|Debug")
+	bool bDebugMode = false;
+
+	UPROPERTY(EditAnywhere, Category="Paddle|Debug")
+	bool bDrawDebugLine = true;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle|Debug")
+	bool bDrawDebugSphere = true;
+#endif
 
 private:
 
-	FAIPaddleDifficulty DifficultyData;
+	FAIPaddleDifficulty DifficultyData = DefaultDifficultyData;
 };

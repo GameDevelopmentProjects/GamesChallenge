@@ -34,9 +34,9 @@ protected:
 	inline float GetMovementSpeedMultiplier() { return MovementSpeedMultiplier; };
 
 	// Movement related private APIs
-	void NotifyMovementStarted();
+	void InitMovement();
 	void MoveUp(float MoveInput);
-	void NotifyMovementEnded();
+	void EndMovement();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMovementSpeedMultiplier, Category = "Paddle|Input", meta = (ClampMin = "0.5", UIMin = "0.5"))
 	float MovementSpeedMultiplier = 1.0f;

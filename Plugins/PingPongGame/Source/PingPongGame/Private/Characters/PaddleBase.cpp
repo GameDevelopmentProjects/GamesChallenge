@@ -23,7 +23,7 @@ bool APaddleBase::TryGetVelocity(float& OutVelocity) const
 	return false;
 }
 
-void APaddleBase::NotifyMovementStarted()
+void APaddleBase::InitMovement()
 {
 	bIsMoving = true;
 }
@@ -35,11 +35,10 @@ void APaddleBase::MoveUp(float MoveInput)
 	Velocity = MoveInput * GetMovementSpeedMultiplier();
 	AddMovementInput(FVector(0.0f, 1.0f, 0.0f), Velocity);
 
-
 	UE_LOG(LogPaddleBase, Verbose, TEXT("Paddle current velocity: %f"), Velocity)	
 }
 
-void APaddleBase::NotifyMovementEnded()
+void APaddleBase::EndMovement()
 {
 	bIsMoving = false;
 	Velocity = 0.0f;

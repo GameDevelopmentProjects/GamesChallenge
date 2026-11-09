@@ -2,10 +2,10 @@
 
 #include "Actors/PongBall.h"
 #include "Characters/PaddleBase.h"
-
 #include "PaperSpriteComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/ArrowComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 DEFINE_LOG_CATEGORY(LogPongBall)
 
@@ -101,23 +101,23 @@ void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 
 	Direction = GetActorForwardVector();
 	FVector Reflected = FMath::GetReflectionVector(Direction, Hit.ImpactNormal).GetSafeNormal2D();
-	float Angle = FMath::RadiansToDegrees(FMath::Atan2(Reflected.Y, Reflected.X));
+	double Angle = FMath::RadiansToDegrees(FMath::Atan2(Reflected.Y, Reflected.X));
 	
 	// Handle paddle velocity influence on this ball
-	APaddleBase* Paddle = Cast<APaddleBase>(OtherActor);
-	// @todo: Creat a point system and increase or decrease the points based on paddle presence 
-	if (Paddle)
+	// @TODO: Creat a point system and increase or decrease the points based on paddle presence 
+	if (APaddleBase* Paddle = Cast<APaddleBase>(OtherActor))
 	{
 		float PaddleVelocity;
 		if (Paddle->TryGetVelocity(PaddleVelocity))
 		{
-			Angle += PaddleVelocity * FMath::RandRange(5.0f, MaxPaddleVelocityAngleInfluence);
+			Angle += PaddleVelocity * FMath::RandRange(5.0f, MaxPaddleAngleInfluence);
 		}
 	}
 
-	Angle = (Reflected.X > 0) ? FMath::ClampAngle(Angle, -LeftSideAngle, LeftSideAngle) : FMath::ClampAngle(Angle, -RightSideAngle, RightSideAngle);
+	Angle = (Reflected.X > 0) ? FMath::ClampAngle(Angle, -MaxBounceAngle.X, MaxBounceAngle.X) : FMath::ClampAngle(Angle, -MaxBounceAngle.Y, MaxBounceAngle.Y);
 	Direction.X = FMath::Cos(FMath::DegreesToRadians(Angle));
 	Direction.Y = FMath::Sin(FMath::DegreesToRadians(Angle));
+	Direction.Z = 0.f;
 
 	SetActorRotation(FRotator(0.0f, Angle, 90.0f));
 

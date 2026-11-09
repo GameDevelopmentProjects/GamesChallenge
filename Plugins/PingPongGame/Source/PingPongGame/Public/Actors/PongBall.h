@@ -42,11 +42,11 @@ protected:
 private:
 
 	/** Sphere collison to detect hit and overlap events */
-	UPROPERTY(VisibleAnywhere, Category = Collision)
+	UPROPERTY(VisibleDefaultsOnly, Category = Collision)
 	TObjectPtr<USphereComponent> SphereComponent;
 
 	/** Sprite asset to render */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sprite, meta = (ExposeFunctionCategories = "Sprite,Rendering,Physics,Components|Sprite", AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Sprite, meta = (ExposeFunctionCategories = "Sprite,Rendering,Physics,Components|Sprite", AllowPrivateAccess = "true"))
 	TObjectPtr<class UPaperSpriteComponent> RenderComponent;
 
 #if WITH_EDITORONLY_DATA
@@ -56,7 +56,7 @@ private:
 #endif
 
 	/** Starting speed of the pong */
-	UPROPERTY(EditDefaultsOnly, Category = "PongBall|Speed")
+	UPROPERTY(EditAnywhere, Category = "PongBall|Speed")
 	float StartSpeed = 10.0f;
 
 	/** Max speed of the pong, will gradually keep increasing. */
@@ -64,24 +64,16 @@ private:
 	float MaxSpeed =  20.0f;
 
 	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation", meta= (ClampMin= "10", ClampMax= "25"))
-	float MaxPaddleVelocityAngleInfluence = 20.0f;
+	float MaxPaddleAngleInfluence = 10.0f;
 
-	/** Maximum reflection angle for the leftward ball movement. */
-	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation|Advanced|Angle")
-	float LeftSideAngle = 70.0f;
-
-	/** Maximum reflection angle for the rightward ball movement. */
-	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation|Advanced|Angle")
-	float RightSideAngle = 140.0f;
-
-
-	/** The Effective Speed of the ball, this will keep increasing until it reaches max speed. */
-	float Velocity;
-
-	/** ths actor's normalized directon, 
-	*	Since UE supports 3D for most computation we would use 3D as 2D vector
-	*	so that we don't have to convert 2D to 3D while computing reflection. 
+	/** Maximum reflection angles for the ball movement.
+	*	X = Left Side Angle
+	*	Y = Right Side Angle
 	*/
+	UPROPERTY(EditAnywhere, Category = "PongBall|Rotation|Advanced|Angle")
+	FVector2D MaxBounceAngle = {70.f, 140.f};
+
+	float Velocity;
 	FVector Direction;
 
 private:

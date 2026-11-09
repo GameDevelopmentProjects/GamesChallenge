@@ -11,18 +11,6 @@ DEFINE_LOG_CATEGORY(LogPlayerPaddle)
 void APlayerPaddle::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Redundant since possessed by handles IMC mapping.
-	APlayerController* PC = Cast<APlayerController>(GetController());
-	if (PC && IMC)
-	{
-		
-		if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem =
-			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer()))
-		{
-			InputSubsystem->AddMappingContext(IMC, 0);
-		}
-	}
 }
 
 void APlayerPaddle::PossessedBy(AController* NewController)
@@ -62,10 +50,9 @@ void APlayerPaddle::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	if(UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Started, this, &ThisClass::NotifyMovementStarted);
+		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Started, this, &ThisClass::InitMovement);
 		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Triggered, this, &ThisClass::HandleMoveUp);
-		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Completed, this, &ThisClass::NotifyMovementEnded);
-		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Completed, this, &ThisClass::NotifyMovementEnded);
+		EnhancedInputComponent->BindAction(MovementIA, ETriggerEvent::Completed, this, &ThisClass::EndMovement);
 	}
 }
 
