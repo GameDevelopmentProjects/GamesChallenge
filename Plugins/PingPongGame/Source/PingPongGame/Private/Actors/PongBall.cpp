@@ -16,7 +16,7 @@ APongBall::APongBall()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->InitSphereRadius(16.0f);
-	SphereComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	SphereComponent->SetCollisionProfileName(TEXT("BlockAll"));
 
 	RootComponent = SphereComponent;
 
@@ -46,12 +46,9 @@ void APongBall::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FVector Forward = GetActorForwardVector();
-	Direction = FVector(Forward.X, Forward.Y, 0.0f);
+	UpdateDirection();
 	
 	Velocity = StartSpeed;
-
-	SphereComponent->OnComponentHit.AddDynamic(this, &APongBall::HandleOnSphereHit);
 }
 
 void APongBall::Tick(float DeltaSeconds)
@@ -81,19 +78,56 @@ void APongBall::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEve
 
 void APongBall::MoveBall(float DeltaSeconds)
 {
-	FVector Location = GetActorLocation();
-	Location += GetActorForwardVector() * Velocity * DeltaSeconds;
-	SetActorLocation(Location, true);
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = StartLocation + (GetActorForwardVector() * Velocity * DeltaSeconds);
 
-	if (Velocity <= MaxSpeed)
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->SweepSingleByChannel(Hit, StartLocation, EndLocation, FQuat::Identity,
+		ECC_GameTraceChannel1 /** Ball */, FCollisionShape::MakeSphere(SphereComponent->GetScaledSphereRadius()), Params);
+
+	if (bHit)
 	{
-		Velocity += 1.0f;
+#if !UE_BUILD_SHIPPING
+		if (bDebugMode)
+		{
+			DrawDebugPoint(GetWorld(), Hit.Location, 10.0f, FColor::Red, false, 1.0f);
+		}
+#endif
+
+		FVector SafeLocation = Hit.Location + (Hit.ImpactNormal * 2.0f);
+		SetActorLocation(SafeLocation, false);
+
+		HandleBallHit(Hit);
 	}
+	else
+	{
+		SetActorLocation(EndLocation, false);
+	}
+
 }
 
-void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void APongBall::UpdateDirection()
 {
-	if (OtherActor->ActorHasTag(TEXT("Wall")) && OtherActor->ActorHasTag(TEXT("KillZone")))
+	FVector Forward = GetActorForwardVector();
+	Direction = FVector(Forward.X, Forward.Y, 0.0f);
+	SetHorizontalDirection(Direction.X > 0 ? EBallDirection::Left : EBallDirection::Right);
+
+	UE_LOG(LogPongBall, Verbose, TEXT("UpdateDirection: New Direction: X: %f Y: %f"), Direction.X, Direction.Y);
+}
+
+void APongBall::SetHorizontalDirection(EBallDirection NewDirection)
+{
+	HorizontalDirection = NewDirection;
+}
+
+void APongBall::HandleBallHit(const FHitResult& Hit)
+{
+	if (!Hit.GetActor()) return;
+
+	if (Hit.GetActor()->ActorHasTag(TEXT("Wall")) && Hit.GetActor()->ActorHasTag(TEXT("KillZone")))
 	{
 		// @TODO: End the round, show the end widget
 		return;
@@ -102,24 +136,22 @@ void APongBall::HandleOnSphereHit(UPrimitiveComponent* HitComponent, AActor* Oth
 	Direction = GetActorForwardVector();
 	FVector Reflected = FMath::GetReflectionVector(Direction, Hit.ImpactNormal).GetSafeNormal2D();
 	double Angle = FMath::RadiansToDegrees(FMath::Atan2(Reflected.Y, Reflected.X));
-	
+
 	// Handle paddle velocity influence on this ball
 	// @TODO: Creat a point system and increase or decrease the points based on paddle presence 
-	if (APaddleBase* Paddle = Cast<APaddleBase>(OtherActor))
+	if (APaddleBase* Paddle = Cast<APaddleBase>(Hit.GetActor()))
 	{
 		float PaddleVelocity;
 		if (Paddle->TryGetVelocity(PaddleVelocity))
 		{
-			Angle += PaddleVelocity * FMath::RandRange(5.0f, MaxPaddleAngleInfluence);
+			Angle += PaddleVelocity * FMath::RandRange(1.0f, MaxPaddleAngleInfluence);
 		}
 	}
 
 	Angle = (Reflected.X > 0) ? FMath::ClampAngle(Angle, -MaxBounceAngle.X, MaxBounceAngle.X) : FMath::ClampAngle(Angle, -MaxBounceAngle.Y, MaxBounceAngle.Y);
-	Direction.X = FMath::Cos(FMath::DegreesToRadians(Angle));
-	Direction.Y = FMath::Sin(FMath::DegreesToRadians(Angle));
-	Direction.Z = 0.f;
-
 	SetActorRotation(FRotator(0.0f, Angle, 90.0f));
+	UpdateDirection();
 
-	UE_LOG(LogPongBall, Verbose, TEXT("New Direction: X: %f Y: %f New Angle: %f"), Direction.X, Direction.Y, Angle)
+	UE_LOG(LogPongBall, Verbose, TEXT("HandleBallHit: New Angle: %f"), Angle)
+
 }

@@ -61,17 +61,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Paddle|AI|Difficulty")
 	FAIPaddleDifficulty HardDifficultyData = { 0.0f };
 
-#if WITH_EDITORONLY_DATA
-
 	UPROPERTY(EditAnywhere, Category = "Paddle|Debug")
-	bool bDebugMode = false;
-
-	UPROPERTY(EditAnywhere, Category="Paddle|Debug")
-	bool bDrawDebugLine = true;
-
-	UPROPERTY(EditAnywhere, Category = "Paddle|Debug")
-	bool bDrawDebugSphere = true;
-#endif
+	uint8 bDebugMode:1;
 
 private:
 

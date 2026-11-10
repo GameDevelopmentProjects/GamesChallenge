@@ -63,14 +63,11 @@ void AAIPaddle::Tick(float DeltaSeconds)
 	if (Location.Y > BallLocation.Y)
 	{
 		MoveUp(-1);
-		//NewLocation.Y -= DifficultyData.PaddleSpeed;
 	}
 	else if (Location.Y < BallLocation.Y)
 	{
 		MoveUp(1);
-		//NewLocation.Y += DifficultyData.PaddleSpeed;
 	}
-	//SetActorLocatin(NewLocation);
 
 	FHitResult Hit;
 	TArray<TWeakObjectPtr<const AActor>> IgnoredActors;
@@ -84,13 +81,7 @@ void AAIPaddle::Tick(float DeltaSeconds)
 
 	if (bHit)
 	{	
-#if WITH_EDITORONLY_DATA
-		if (bDebugMode)
-		{
-			if (bDrawDebugLine)		DrawDebugLine(GetWorld(), BallLocation, Hit.Location, FColor::Blue, false, .1f);
-			if (bDrawDebugSphere)	DrawDebugSphere(GetWorld(), Hit.Location, 10, 10, FColor::Red, false, .1f);
-		}
-#endif 
+
 	}
 	
 }

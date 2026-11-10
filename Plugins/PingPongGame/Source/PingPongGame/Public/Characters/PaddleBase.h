@@ -39,7 +39,7 @@ protected:
 	void EndMovement();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintGetter = GetMovementSpeedMultiplier, Category = "Paddle|Input", meta = (ClampMin = "0.5", UIMin = "0.5"))
-	float MovementSpeedMultiplier = 1.0f;
+	float MovementSpeedMultiplier = 10.0f;
 
 private:
 	
